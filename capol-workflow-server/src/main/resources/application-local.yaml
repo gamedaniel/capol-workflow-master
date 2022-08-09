@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:mysql://10.1.207.12:3306/db_workflow2?allowPublicKeyRetrieval=true&allowMultiQueries=true&useUnicode=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&nullCatalogMeansCurrent=true
+    username: root
+    password: mysql_root_test_2021
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: DemoHikariPool
+      maximum-pool-size: 10
+      minimum-idle: 5
+      validation-timeout: 2500
+      idle-timeout: 300000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+
+
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+camunda:
+  bpm:
+    database:
+      schema-update: true
+    job-execution:
+      enabled: false
+
+logging:
+  config: classpath:logback-spring.xml
+

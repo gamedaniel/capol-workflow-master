@@ -1,0 +1,9 @@
+server:
+  port: 12306
+
+spring:
+  application:
+    name: capol-workflow-server
+
+  profiles:
+    active: local
