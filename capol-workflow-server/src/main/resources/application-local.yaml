@@ -27,6 +27,7 @@ camunda:
       schema-update: true
     job-execution:
       enabled: false
+    id-generator: prefixed
 
 logging:
   config: classpath:logback-spring.xml
