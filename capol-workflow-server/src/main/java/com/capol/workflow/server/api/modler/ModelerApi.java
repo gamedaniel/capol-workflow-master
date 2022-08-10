@@ -63,7 +63,6 @@ public class ModelerApi {
             ConditionExpression conditionExpression = seqItem.getConditionExpression();
             System.out.println(conditionExpression == null ? "" : conditionExpression.getTextContent());
         }
-
         System.out.println("---------flow seq---------");
 
         for (FlowNode flowNode :
