@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.capol.workflow.server.mapper.FlowConfigMapper">
+    <insert id="insertFlowConfig" parameterType="com.capol.workflow.server.model.po.FlowConfig">
+        insert into t_flow_config (id,
+            enterprise_id,
+            flow_type,
+            flow_config_type,
+            flow_name,
+            flow_comments,
+            flow_sence,
+            flow_config_apply,
+            flow_deploy_key,
+            `status`,
+            creator,
+            creator_id,
+            create_time,
+            created_host_ip,
+            last_operator,
+            last_operator_id,
+            update_time,
+            update_host_ip)
+        values (
+                   id,
+                   enterpriseId,
+                   flowType,
+                   flowConfigType,
+                   flowName,
+                   flowComments,
+                   flowSence,
+                   flowConfigApply,
+                   flowDeployKey,
+                   status,
+                   creator,
+                   creatorId,
+                   createTime,
+                   createdHostIp,
+                   lastOperator,
+                   lastOperatorId,
+                   updateTime,
+                   updateHostIp
+               )
+    </insert>
+</mapper>
