@@ -7,3 +7,14 @@ spring:
 
   profiles:
     active: local
+
+  cloud:
+    consul:
+      host: 10.1.207.24
+      port: 8500
+      enable: true
+      discovery:
+        enabled: true
+        instance-id: ${spring.application.name}
+        service-name: ${spring.application.name}
+
