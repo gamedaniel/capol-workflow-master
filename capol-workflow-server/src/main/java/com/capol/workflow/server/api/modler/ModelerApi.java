@@ -1,11 +1,17 @@
 package com.capol.workflow.server.api.modler;
 
+import de.odysseus.el.ExpressionFactoryImpl;
+import de.odysseus.el.util.SimpleContext;
+import de.odysseus.el.util.SimpleResolver;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.impl.persistence.entity.GroupEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.TenantEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.UserEntity;
+import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.camunda.bpm.engine.impl.context.Context;
+import org.camunda.bpm.engine.impl.el.Expression;
+import org.camunda.bpm.engine.impl.interceptor.CommandContext;
+import org.camunda.bpm.engine.impl.persistence.entity.*;
+import org.camunda.bpm.engine.impl.pvm.runtime.ExecutionImpl;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
@@ -18,9 +24,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/flow")
@@ -35,6 +45,8 @@ public class ModelerApi {
     @Autowired
     private IdentityService identityService;
 
+    @Autowired
+    private ProcessEngineConfigurationImpl processEngineConfiguration;
 
 
     @GetMapping("/modeldetail")
@@ -199,5 +211,17 @@ public class ModelerApi {
 
 
         return result;
+    }
+
+    @GetMapping("test/preview")
+    public String preview()  throws IOException {
+        ExpressionFactory factory = new ExpressionFactoryImpl();
+
+        SimpleContext context = new SimpleContext(new SimpleResolver());
+        context.setVariable("role", factory.createValueExpression("001", String.class));
+        ValueExpression expression = factory.createValueExpression(context, "${role==\"001\"}", Boolean.class);
+        Object value = expression.getValue(context);
+        System.out.println(value);
+        return "preview";
     }
 }
