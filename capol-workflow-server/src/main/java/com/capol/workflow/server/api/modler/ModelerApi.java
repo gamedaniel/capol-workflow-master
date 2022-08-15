@@ -218,8 +218,9 @@ public class ModelerApi {
         ExpressionFactory factory = new ExpressionFactoryImpl();
 
         SimpleContext context = new SimpleContext(new SimpleResolver());
-        context.setVariable("role", factory.createValueExpression("001", String.class));
-        ValueExpression expression = factory.createValueExpression(context, "${role==\"001\"}", Boolean.class);
+        context.setVariable("role", factory.createValueExpression("001", Object.class));
+        context.setVariable("approval_2", factory.createValueExpression("0", Object.class));
+        ValueExpression expression = factory.createValueExpression(context, "${role==\"001\" and approval_2==0}", Boolean.class);
         Object value = expression.getValue(context);
         System.out.println(value);
         return "preview";
