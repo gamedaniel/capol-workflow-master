@@ -6,6 +6,7 @@ import de.odysseus.el.util.SimpleResolver;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.identity.User;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.el.Expression;
@@ -265,5 +266,17 @@ public class ModelerApi {
         Collection<ExtensionElements> extensionElements = modelInstance.getModelElementsByType(ExtensionElements.class);
 
         return "preview1";
+    }
+
+
+    @GetMapping("user/{userId}")
+    public List<User> preview1(@PathVariable String userId)  throws IOException {
+        List<User> users = identityService.createUserQuery().userId(userId).list();
+
+        for (User userEntity: users) {
+            System.out.println(userEntity.getId());
+        }
+
+        return users;
     }
 }
