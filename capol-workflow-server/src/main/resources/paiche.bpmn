@@ -9,67 +9,43 @@
       <bpmn:outgoing>Flow_12d2jci</bpmn:outgoing>
       <bpmn:outgoing>Flow_15qjto1</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0grchee" sourceRef="StartEvent_1" targetRef="Gateway_1hbg67t" />
-    <bpmn:sequenceFlow id="Flow_12d2jci" name="职员" sourceRef="Gateway_1hbg67t" targetRef="usertask1">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${role=="002"}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:userTask id="usertask1" name="部门领导审批" camunda:assignee="${dept_leader}">
       <bpmn:incoming>Flow_12d2jci</bpmn:incoming>
       <bpmn:incoming>Flow_02hk4j1</bpmn:incoming>
       <bpmn:outgoing>Flow_1xa385x</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_15qjto1" name="部门领导" sourceRef="Gateway_1hbg67t" targetRef="usertask2">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${role=="001"}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="Gateway_1jyglvk">
       <bpmn:incoming>Flow_1xa385x</bpmn:incoming>
       <bpmn:outgoing>Flow_0jy2h49</bpmn:outgoing>
       <bpmn:outgoing>Flow_1bdq439</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="usertask2" name="车管领导审批" camunda:assignee="${auto_dept_leader}">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="abc" value="dev" />
+        </camunda:properties>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_15qjto1</bpmn:incoming>
       <bpmn:incoming>Flow_1bdq439</bpmn:incoming>
       <bpmn:outgoing>Flow_1rj1la6</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_1xa385x" sourceRef="usertask1" targetRef="Gateway_1jyglvk" />
-    <bpmn:sequenceFlow id="Flow_0jy2h49" name="未通过" sourceRef="Gateway_1jyglvk" targetRef="usertask4">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_2==0}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1bdq439" name="通过" sourceRef="Gateway_1jyglvk" targetRef="usertask2">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_2==1}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="Gateway_1yetyic">
       <bpmn:incoming>Flow_1rvlzz2</bpmn:incoming>
       <bpmn:outgoing>Flow_02hk4j1</bpmn:outgoing>
       <bpmn:outgoing>Flow_058j8fe</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1rvlzz2" sourceRef="usertask4" targetRef="Gateway_1yetyic" />
-    <bpmn:sequenceFlow id="Flow_02hk4j1" name="重新申请" sourceRef="Gateway_1yetyic" targetRef="usertask1">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_3==2}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_0ci01ly">
       <bpmn:incoming>Flow_058j8fe</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_058j8fe" name="取消申请" sourceRef="Gateway_1yetyic" targetRef="Event_0ci01ly">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_2==3}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="Gateway_1pgz33x">
       <bpmn:incoming>Flow_1rj1la6</bpmn:incoming>
       <bpmn:outgoing>Flow_005mxtl</bpmn:outgoing>
       <bpmn:outgoing>Flow_0ikhm6z</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1rj1la6" sourceRef="usertask2" targetRef="Gateway_1pgz33x" />
-    <bpmn:sequenceFlow id="Flow_005mxtl" name="未通过" sourceRef="Gateway_1pgz33x" targetRef="usertask4">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_2==0}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:userTask id="usertask3" name="车管员派车" camunda:assignee="${auto_manager}">
       <bpmn:incoming>Flow_0ikhm6z</bpmn:incoming>
       <bpmn:outgoing>Flow_1c58ukq</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_0ikhm6z" name="通过" sourceRef="Gateway_1pgz33x" targetRef="usertask3">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_2==1}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1c58ukq" sourceRef="usertask3" targetRef="Activity_09cqvrp" />
     <bpmn:userTask id="Activity_09cqvrp" name="申请人确认" camunda:assignee="${startUserId}">
       <bpmn:incoming>Flow_1c58ukq</bpmn:incoming>
       <bpmn:outgoing>Flow_09572o5</bpmn:outgoing>
@@ -77,12 +53,42 @@
     <bpmn:endEvent id="Event_0z4ildt">
       <bpmn:incoming>Flow_09572o5</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_09572o5" sourceRef="Activity_09cqvrp" targetRef="Event_0z4ildt" />
     <bpmn:userTask id="usertask4" name="修改申请" camunda:assignee="${startUserId}">
       <bpmn:incoming>Flow_0jy2h49</bpmn:incoming>
       <bpmn:incoming>Flow_005mxtl</bpmn:incoming>
       <bpmn:outgoing>Flow_1rvlzz2</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="startUserIdList" camunda:elementVariable="startUserId" />
     </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_09572o5" sourceRef="Activity_09cqvrp" targetRef="Event_0z4ildt" />
+    <bpmn:sequenceFlow id="Flow_1c58ukq" sourceRef="usertask3" targetRef="Activity_09cqvrp" />
+    <bpmn:sequenceFlow id="Flow_0ikhm6z" name="通过" sourceRef="Gateway_1pgz33x" targetRef="usertask3">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_2==1}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_005mxtl" name="未通过" sourceRef="Gateway_1pgz33x" targetRef="usertask4">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_2==0}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1rj1la6" sourceRef="usertask2" targetRef="Gateway_1pgz33x" />
+    <bpmn:sequenceFlow id="Flow_058j8fe" name="取消申请" sourceRef="Gateway_1yetyic" targetRef="Event_0ci01ly">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_2==3}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_02hk4j1" name="重新申请" sourceRef="Gateway_1yetyic" targetRef="usertask1">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_3==2}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1rvlzz2" sourceRef="usertask4" targetRef="Gateway_1yetyic" />
+    <bpmn:sequenceFlow id="Flow_1bdq439" name="通过" sourceRef="Gateway_1jyglvk" targetRef="usertask2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_2==1}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0jy2h49" name="未通过" sourceRef="Gateway_1jyglvk" targetRef="usertask4">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approval_2==0}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1xa385x" sourceRef="usertask1" targetRef="Gateway_1jyglvk" />
+    <bpmn:sequenceFlow id="Flow_15qjto1" name="部门领导" sourceRef="Gateway_1hbg67t" targetRef="usertask2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${role=="001"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_12d2jci" name="职员" sourceRef="Gateway_1hbg67t" targetRef="usertask1">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${role=="002"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0grchee" sourceRef="StartEvent_1" targetRef="Gateway_1hbg67t" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="paiche">

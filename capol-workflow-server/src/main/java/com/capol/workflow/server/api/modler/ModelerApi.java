@@ -20,6 +20,9 @@ import org.camunda.bpm.engine.task.IdentityLink;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
+import org.camunda.bpm.model.bpmn.instance.camunda.CamundaProperties;
+import org.camunda.bpm.model.bpmn.instance.camunda.CamundaProperty;
+import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -83,6 +87,7 @@ public class ModelerApi {
             Collection<SequenceFlow> outgoing = flowNode.getOutgoing();
 
             System.out.println(flowNode.getId());
+
         }
 
         System.out.println("event id");
@@ -118,6 +123,8 @@ public class ModelerApi {
         if (CollectionUtils.isEmpty(list)) {
             return "Empty";
         }
+
+        //List<Deployment> deploymentEntities = repositoryService.createDeploymentQuery().list();
         StringBuilder builder = new StringBuilder();
         for (ProcessDefinition definition : list) {
             String id = definition.getId();
@@ -224,5 +231,39 @@ public class ModelerApi {
         Object value = expression.getValue(context);
         System.out.println(value);
         return "preview";
+    }
+
+    @GetMapping("test/preview1")
+    public String preview1()  throws IOException {
+        List<Deployment> deploymentEntities = repositoryService.createDeploymentQuery()
+                .deploymentId("capol-workflow-server-a05ac541-1ddb-11ed-8f8f-a08cfddabf91")
+                .list();
+        Deployment item = deploymentEntities.get(0);
+
+        InputStream ioStream = repositoryService.getResourceAsStream(item.getId(), "paiche.bpmn");
+        BpmnModelInstance modelInstance = Bpmn.readModelFromStream(ioStream);
+        Collection<FlowNode> flowNodes = modelInstance.getModelElementsByType(FlowNode.class);
+
+        for (FlowNode flowNode :
+                flowNodes) {
+            if (flowNode.getId().equals("usertask2")) {
+                Collection<CamundaProperties> camundaPropertiesCollection = flowNode.getExtensionElements().getChildElementsByType(CamundaProperties.class);
+                for (CamundaProperties camundaProperties : camundaPropertiesCollection) {
+                    for (CamundaProperty camundaProperty : camundaProperties.getCamundaProperties()) {
+                        System.out.println(camundaProperty.getCamundaName());
+                        System.out.println(camundaProperty.getCamundaValue());
+                    }
+
+                }
+                //System.out.println(flowNode.getId());
+            }
+
+            //System.out.println(flowNode.getId());
+
+        }
+
+        Collection<ExtensionElements> extensionElements = modelInstance.getModelElementsByType(ExtensionElements.class);
+
+        return "preview1";
     }
 }
