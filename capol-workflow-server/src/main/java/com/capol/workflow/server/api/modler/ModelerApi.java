@@ -3,9 +3,11 @@ package com.capol.workflow.server.api.modler;
 import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 import de.odysseus.el.util.SimpleResolver;
+import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.identity.User;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
@@ -49,6 +51,9 @@ public class ModelerApi {
 
     @Autowired
     private IdentityService identityService;
+
+    @Autowired
+    private HistoryService historyService;
 
     @Autowired
     private ProcessEngineConfigurationImpl processEngineConfiguration;
@@ -278,5 +283,12 @@ public class ModelerApi {
         }
 
         return users;
+    }
+
+    @GetMapping("task/can")
+    public String taskCan()  throws IOException {
+        List<HistoricTaskInstance> historicTaskInstanceList = historyService.createHistoricTaskInstanceQuery().taskAssignee("004").list();
+
+        return "preview1";
     }
 }
