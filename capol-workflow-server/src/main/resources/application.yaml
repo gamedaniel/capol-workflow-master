@@ -6,15 +6,32 @@ spring:
     name: capol-workflow-server
 
   profiles:
-    active: local
+    active: QA
+
+  config:
+    import: optional:consul:10.1.207.24:8500
 
   cloud:
     consul:
+      config:
+        format: files
+        enabled: true
+        profile-separator: _
+        prefixes: config
+        default-context: ${spring.application.name}
       host: 10.1.207.24
       port: 8500
       enable: true
       discovery:
         enabled: true
-        instance-id: ${spring.application.name}
+        instance-id: ${spring.application.name}-${spring.cloud.client.ip-address}-${server.port}
         service-name: ${spring.application.name}
+        health-check-interval: 10s
+        prefer-ip-address: true
+        health-check-critical-timeout: 10m
+        register: true
+        deregister: false
+        health-check-timeout: 10s
+        default-query-tag: env=dev
+        tags: env=dev
 
