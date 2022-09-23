@@ -95,6 +95,12 @@
             <groupId>de.odysseus.juel</groupId>
             <artifactId>juel-spi</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>1.7.36</version>
+        </dependency>
     </dependencies>
 
 </project>
