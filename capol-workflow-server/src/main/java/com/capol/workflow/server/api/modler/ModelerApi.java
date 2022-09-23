@@ -1,5 +1,6 @@
 package com.capol.workflow.server.api.modler;
 
+import com.capol.workflow.server.common.utils.ExpressionUtil;
 import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 import de.odysseus.el.util.SimpleResolver;
@@ -287,7 +288,10 @@ public class ModelerApi {
 
     @GetMapping("task/can")
     public String taskCan()  throws IOException {
-        List<HistoricTaskInstance> historicTaskInstanceList = historyService.createHistoricTaskInstanceQuery().taskAssignee("004").list();
+        //List<HistoricTaskInstance> historicTaskInstanceList = historyService.createHistoricTaskInstanceQuery().taskAssignee("004").list();
+        Map<String, Object> variable = new HashMap<>();
+        variable.put("abc", "aab,caaa,ddd");
+        Boolean result = ExpressionUtil.runBooleanExpression("${abc.contains('aa')}", variable);
 
         return "preview1";
     }
