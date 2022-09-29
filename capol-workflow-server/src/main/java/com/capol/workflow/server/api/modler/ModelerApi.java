@@ -291,7 +291,7 @@ public class ModelerApi {
         //List<HistoricTaskInstance> historicTaskInstanceList = historyService.createHistoricTaskInstanceQuery().taskAssignee("004").list();
         Map<String, Object> variable = new HashMap<>();
         variable.put("abc", "aab,caaa,ddd");
-        Boolean result = ExpressionUtil.runBooleanExpression("${abc.contains('aa')}", variable);
+        Boolean result = ExpressionUtil.runBooleanExpression("${abc.contains('aa') or abc.contains('bb')}", variable);
 
         return "preview1";
     }
