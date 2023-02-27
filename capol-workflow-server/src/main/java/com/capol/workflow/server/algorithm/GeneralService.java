@@ -1,5 +1,8 @@
 package com.capol.workflow.server.algorithm;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class GeneralService {
     public static String lcsUseDynamicProgram(String str1,String str2) {
         // 万法入口惯例校验入参
