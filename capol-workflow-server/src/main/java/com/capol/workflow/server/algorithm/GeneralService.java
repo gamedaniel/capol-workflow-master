@@ -1,5 +1,6 @@
 package com.capol.workflow.server.algorithm;
 
+import com.capol.workflow.server.algorithm.struct.ListNode;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -100,5 +101,21 @@ public class GeneralService {
         }
 
         return maxLength;
+    }
+
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+
+        while(curr != null) {
+            // 翻转箭头
+            ListNode nxt = curr.next;
+            curr.next = prev;
+            //三人行
+            prev = curr;
+            curr = nxt;
+        }
+
+        return prev;
     }
 }
